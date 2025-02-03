@@ -5,70 +5,79 @@ from praktikum.ingredient import Ingredient
 from praktikum.ingredient_types import INGREDIENT_TYPE_SAUCE, INGREDIENT_TYPE_FILLING
 
 
-def test_database_initialization():
-    db = Database()
+class TestDatabase:
+    """Тесты для класса Database."""
 
-    assert len(db.buns) == 3
-    assert len(db.ingredients) == 6
+    def test_database_initialization_bun_count(self):
+        """Проверяет, что база данных инициализируется с тремя булками."""
+        db = Database()
+        assert len(db.buns) == 3
 
-    assert db.buns[0].get_name() == "black bun"
-    assert db.buns[0].get_price() == 100
-    assert db.buns[1].get_name() == "white bun"
-    assert db.buns[1].get_price() == 200
-    assert db.buns[2].get_name() == "red bun"
-    assert db.buns[2].get_price() == 300
+    def test_database_initialization_ingredient_count(self):
+        """Проверяет, что база данных инициализируется с шестью ингредиентами."""
+        db = Database()
+        assert len(db.ingredients) == 6
 
-    assert db.ingredients[0].get_type() == INGREDIENT_TYPE_SAUCE
-    assert db.ingredients[0].get_name() == "hot sauce"
-    assert db.ingredients[0].get_price() == 100
+    @pytest.mark.parametrize("index, name, price", [
+        (0, "black bun", 100),
+        (1, "white bun", 200),
+        (2, "red bun", 300)
+    ])
+    def test_database_initialization_bun_properties(self, index, name, price):
+        """Проверяет, что у булок корректные названия и цены."""
+        db = Database()
+        assert db.buns[index].get_name() == name
+        assert db.buns[index].get_price() == price
 
-    assert db.ingredients[3].get_type() == INGREDIENT_TYPE_FILLING
-    assert db.ingredients[3].get_name() == "cutlet"
-    assert db.ingredients[3].get_price() == 100
+    @pytest.mark.parametrize("index, ing_type, name, price", [
+        (0, INGREDIENT_TYPE_SAUCE, "hot sauce", 100),
+        (1, INGREDIENT_TYPE_SAUCE, "sour cream", 200),
+        (2, INGREDIENT_TYPE_SAUCE, "chili sauce", 300),
+        (3, INGREDIENT_TYPE_FILLING, "cutlet", 100),
+        (4, INGREDIENT_TYPE_FILLING, "dinosaur", 200),
+        (5, INGREDIENT_TYPE_FILLING, "sausage", 300)
+    ])
+    def test_database_initialization_ingredient_properties(self, index, ing_type, name, price):
+        """Проверяет, что у ингредиентов корректные названия, типы и цены."""
+        db = Database()
+        assert db.ingredients[index].get_type() == ing_type
+        assert db.ingredients[index].get_name() == name
+        assert db.ingredients[index].get_price() == price
 
+    def test_available_buns_count(self):
+        """Проверяет, что метод available_buns возвращает три булки."""
+        db = Database()
+        assert len(db.available_buns()) == 3
 
-def test_available_buns():
-    db = Database()
+    @pytest.mark.parametrize("index, name, price", [
+        (0, "black bun", 100),
+        (1, "white bun", 200),
+        (2, "red bun", 300)
+    ])
+    def test_available_buns_properties(self, index, name, price):
+        """Проверяет, что метод available_buns возвращает корректные булки."""
+        db = Database()
+        buns = db.available_buns()
+        assert buns[index].get_name() == name
+        assert buns[index].get_price() == price
 
-    buns = db.available_buns()
+    def test_available_ingredients_count(self):
+        """Проверяет, что метод available_ingredients возвращает шесть ингредиентов."""
+        db = Database()
+        assert len(db.available_ingredients()) == 6
 
-    assert len(buns) == 3
-
-    assert buns[0].get_name() == "black bun"
-    assert buns[0].get_price() == 100
-    assert buns[1].get_name() == "white bun"
-    assert buns[1].get_price() == 200
-    assert buns[2].get_name() == "red bun"
-    assert buns[2].get_price() == 300
-
-
-def test_available_ingredients():
-    db = Database()
-
-    ingredients = db.available_ingredients()
-
-    assert len(ingredients) == 6
-
-    assert ingredients[0].get_type() == INGREDIENT_TYPE_SAUCE
-    assert ingredients[0].get_name() == "hot sauce"
-    assert ingredients[0].get_price() == 100
-
-    assert ingredients[1].get_type() == INGREDIENT_TYPE_SAUCE
-    assert ingredients[1].get_name() == "sour cream"
-    assert ingredients[1].get_price() == 200
-
-    assert ingredients[2].get_type() == INGREDIENT_TYPE_SAUCE
-    assert ingredients[2].get_name() == "chili sauce"
-    assert ingredients[2].get_price() == 300
-
-    assert ingredients[3].get_type() == INGREDIENT_TYPE_FILLING
-    assert ingredients[3].get_name() == "cutlet"
-    assert ingredients[3].get_price() == 100
-
-    assert ingredients[4].get_type() == INGREDIENT_TYPE_FILLING
-    assert ingredients[4].get_name() == "dinosaur"
-    assert ingredients[4].get_price() == 200
-
-    assert ingredients[5].get_type() == INGREDIENT_TYPE_FILLING
-    assert ingredients[5].get_name() == "sausage"
-    assert ingredients[5].get_price() == 300
+    @pytest.mark.parametrize("index, ing_type, name, price", [
+        (0, INGREDIENT_TYPE_SAUCE, "hot sauce", 100),
+        (1, INGREDIENT_TYPE_SAUCE, "sour cream", 200),
+        (2, INGREDIENT_TYPE_SAUCE, "chili sauce", 300),
+        (3, INGREDIENT_TYPE_FILLING, "cutlet", 100),
+        (4, INGREDIENT_TYPE_FILLING, "dinosaur", 200),
+        (5, INGREDIENT_TYPE_FILLING, "sausage", 300)
+    ])
+    def test_available_ingredients_properties(self, index, ing_type, name, price):
+        """Проверяет, что метод available_ingredients возвращает корректные ингредиенты."""
+        db = Database()
+        ingredients = db.available_ingredients()
+        assert ingredients[index].get_type() == ing_type
+        assert ingredients[index].get_name() == name
+        assert ingredients[index].get_price() == price
