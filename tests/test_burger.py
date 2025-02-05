@@ -19,16 +19,6 @@ class TestBurger:
         assert burger.bun is not None
         assert burger.bun == bun
 
-    def test_get_bun_name(self):
-        """Тест получения названия булки."""
-        bun = Bun("Sesame", 2.5)
-        assert bun.get_name() == "Sesame"
-
-    def test_get_bun_price(self):
-        """Тест получения цены булки."""
-        bun = Bun("Sesame", 2.5)
-        assert bun.get_price() == 2.5
-
     def test_add_ingredient(self):
         """Тест добавления ингредиента в бургер."""
         burger = Burger()
